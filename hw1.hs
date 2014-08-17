@@ -13,8 +13,30 @@ toDigits x
 
 -- ex 2
 
+doubleEveryOtherLtoR :: [Integer] -> [Integer]
+doubleEveryOtherLtoR [] = []
+doubleEveryOtherLtoR (x:[]) = [x]
+doubleEveryOtherLtoR (x:(y:zs)) = x : (y*2:(doubleEveryOtherLtoR zs))
+
 doubleEveryOther :: [Integer] -> [Integer]
-doubleEveryOther [] = []
-doubleEveryOther (x : []) = [x]
-doubleEveryOther (x : (y : [] )) = [x, y*2]
-doubleEveryOther (x : (y : zs )) = 
+doubleEveryOther xs = reverse (doubleEveryOtherLtoR (reverse xs))
+
+-- ex 3
+
+sumDigitsInt :: Integer -> Integer
+sumDigitsInt x
+	| x < 10 = x
+	| otherwise = (x `mod` 10) + sumDigitsInt (x `div` 10) 
+
+sumDigits :: [Integer] -> Integer
+sumDigits [] = 0
+sumDigits [x] = sumDigitsInt x
+sumDigits (x : zs) = (sumDigitsInt x) + (sumDigits zs)
+
+-- ex 4
+
+checksum :: Integer -> Integer
+checksum x = sumDigits (doubleEveryOther (toDigits x))
+
+validate :: Integer -> Bool
+validate x = (sumDigits (doubleEveryOther (toDigits x))) `mod` 10 == 0
